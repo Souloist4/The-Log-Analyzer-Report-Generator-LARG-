@@ -1,0 +1,93 @@
+State-Transition Diagram for Log Analyzer & Report Generator (LARG) 1.1
+
+
++--------------------+
+|   Start/Idle       |
++--------------------+
+        |
+        | [User selects log file(s)]
+        v
++----------------------+
+|   Load Log Files     |
++----------------------+
+        |
+	| [Log files loaded successfully]
+        |------------------------------+
+        |                              |
+        | [Load fails]                 |
+        v                              |
++----------------------+               |
+|      Error           |---------------+
++----------------------+
+        |
+        | [Resolve Error]
+        v
++--------------------+
+|   Start/Idle       |
++--------------------+
+        |
+        | [User selects log file(s)]
+        v
++----------------------+
+|   Load Log Files     |
++----------------------+
+        |
+	| [Log files loaded successfully]
+        |------------------------------+
+        |                              |
+        | [Load fails]                 |
+        v                              |
++----------------------+               |
+|      Error           |---------------+
++----------------------+
+        |
+        | [Resolve Error]
+        v
++--------------------+
+|   Start/Idle       |
++--------------------+
+        |
+        |
+        | [Log files loaded successfully]
+        v
++----------------------+
+|   Parse Log Files    |
++----------------------+
+        |
+	| [Parsing complete]
+        |------------------------------+
+        |                              |
+        | [Parsing fails]              |
+        v                              |
++----------------------+               |
+|      Error           |---------------+
++----------------------+
+        |
+        | [Resolve Error]
+        v
++--------------------+
+|   Display (Idle)   |
++--------------------+
+        |
+        | [User initiates actions]
+        v
++--------------------------------+
+| Display <--> Search/Filter     |
+| Display <--> Summaries         |
+| Display <--> Detect Patterns   |
+| Display --> Export --> Display |
++--------------------------------+
+        |
+        | [User requests report export]
+        v
++----------------------+
+|   Export Report      |
++----------------------+
+        |
+        | [Export complete or user starts over]
+        v
++--------------------+
+|   Display (Idle)   |
++--------------------+  
+
+        

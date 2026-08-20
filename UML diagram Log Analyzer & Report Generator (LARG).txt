@@ -1,0 +1,65 @@
+UML diagram Log Analyzer & Report Generator (LARG)
+
+
++----------------+        +----------------+       +---------------------+
+|   LogManager   |<>------|    LogFile     |<>-----|     LogEntry        |
++----------------+        +----------------+       +---------------------+
+| - logFiles     |        | - filePath     |       | - timestamp         |
+| +addLogFile()  |        | - entries      |       | - message           |
+| +removeLogFile()|       | +load()        |       | - level             |
+| +getAllEntries()|       | +parse()       |       | +toString()         |
++----------------+        +----------------+       +---------------------+
+        |
+        | uses
+        v
++---------------------+
+|   SearchFilter      |
++---------------------+
+| - searchCriteria    |
+| +filter()           |
+| +search()           |
++---------------------+
+
+        |
+        | uses
+        v
++---------------------+
+| SummaryStatistics   |
++---------------------+
+| - totalEntries      |
+| - errorsCount       |
+| - warningsCount     |
+| +generateSummary()  |
++---------------------+
+
+        |
+        | uses
+        v
++---------------------+
+|  PatternDetector    |
++---------------------+
+| - patterns          |
+| +detectPatterns()   |
+| - flaggedEntries    |
++---------------------+
+
+        |
+        | uses
+        v
++---------------------+
+|  ReportExporter     |
++---------------------+
+| +exportLog()        |
+| +exportTXT()        |
++---------------------+
+
+        |
+        | interacts with
+        v
++---------------------+
+|   UserInterface     |
++---------------------+
+| +displayLog()       |
+| +showStatistics()   |
+| +getUserInput()     |
++---------------------+

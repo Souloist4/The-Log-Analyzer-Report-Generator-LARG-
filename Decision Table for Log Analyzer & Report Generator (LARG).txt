@@ -1,0 +1,19 @@
+Decision Table for Log Analyzer & Report Generator (LARG)
+
+
++---------------------+----------------+----------------+----------------+----------------+
+| Condition           | Rule 1         | Rule 2         | Rule 3         | Rule 4         |
++---------------------+----------------+----------------+----------------+----------------+
+| Log file selected   | Yes            | Yes            | Yes            | No             |
+| Log file loaded     | Yes            | Yes            | No             | -              |
+| Search/filter       | Yes            | No             | -              | -              |
+| Export report       | No             | Yes            | -              | -              |
++---------------------+----------------+----------------+----------------+----------------+
+| Action              |                |                |                |                |
++---------------------+----------------+----------------+----------------+----------------+
+| Parse log file      | Yes            | Yes            | No             | No             |
+| Display entries     | Yes            | Yes            | No             | No             |
+| Apply search/filter | Yes            | No             | No             | No             |
+| Export report       | No             | Yes            | No             | No             |
+| Show error message  | No             | No             | Yes            | Yes            |
++---------------------+----------------+----------------+----------------+----------------+

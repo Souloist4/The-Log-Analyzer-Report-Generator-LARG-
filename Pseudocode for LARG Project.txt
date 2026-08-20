@@ -1,0 +1,761 @@
+ Pseudocode for LARG Project
+
+"Psuedocode"
+
+Class LogEntry:
+    
+    // Initialize a log entry with timestamp, message, and level
+    Method __init__(timestamp, message, level):
+        Set self.timestamp to timestamp
+        Set self.message to message
+        Set self.level to level
+
+    // Retrieve the timestamp
+    Method get_timestamp():
+        Return self.timestamp
+
+    // Set a new timestamp
+    Method set_timestamp(timestamp):
+        Set self.timestamp to timestamp
+
+    // Retrieve the message
+    Method get_message():
+        Return self.message
+
+    // Set a new message
+    Method set_message(message):
+        Set self.message to message
+
+    // Retrieve the log level
+    Method get_level():
+        Return self.level
+
+    // Set a new log level
+    Method set_level(level):
+        Set self.level to level
+
+    // Return a string representation of the log entry
+    Method __str__():
+        Return "[" + self.timestamp + "] [" + self.level + "]: " + self.message
+
+////////////////////////////////Log Manager class******************************
+
+
+"Pseudocode"
+
+Class LogManager:
+    Initialize:
+        Create an empty list called log_files
+
+    Method add_log_file(log_file_path):
+        Append log_file_path to log_files
+
+    Method remove_log_file(log_file_path):
+        If log_file_path exists in log_files:
+            Remove log_file_path from log_files
+
+    Method get_all_entries():
+        Initialize an empty list called all_entries
+        For each log_file in log_files:
+            entries = call read_entries(log_file)
+            Add entries to all_entries
+        Return all_entries
+
+    Method read_entries(log_file_path):
+        Initialize an empty list called entries
+        Try:
+            Open log_file_path for reading
+            For each line in the file:
+                Remove whitespace from the line (strip)
+                Add the line to entries
+        Catch IOError:
+            Print error message with log_file_path
+        Return entries
+
+
+
+******************SummaryStatistics Class*******************
+
+"Pseudocode"
+
+Class SummaryStatistics:
+
+    // Constructor to initialize counts
+    Method initialize(total_entries, errors_count, warnings_count):
+        Set self.total_entries to total_entries
+        Set self.errors_count to errors_count
+        Set self.warnings_count to warnings_count
+
+    // Process a log entry based on its level
+    Method process_logentry(level):
+        If level is ERROR or CRITICAL:
+            Increment self.errors_count by 1
+        Else if level is WARNNG:
+            Increment self.warnings_count by 1
+        Increment self.total_entries by 1
+
+    // Generate and display a summary of counts
+    Method generate_summary():
+        Print "Total Entries: " + self.total_entries
+        Print "Errors: " + self.errors_count
+        Print "Warnings: " + self.warnings_count
+
+    // Getters
+    Method get_total_entries():
+        Return self.total_entries
+
+    Method get_errors_count():
+        Return self.errors_count
+
+    Method get_warnings_count():
+        Return self.warnings_count
+
+    // Setters
+    Method set_total_entries(new_total):
+        Set self.total_entries to new_total
+
+    Method set_errors_count(new_errors):
+        Set self.errors_count to new_errors
+
+    Method set_warnings_count(new_warnings):
+        Set self.warnings_count to new_warnings
+
+    // Reset all counts to zero
+    Method reset_counts():
+        Set self.total_entries to 0
+        Set self.errors_count to 0
+        Set self.warnings_count to 0
+
+    // Calculate error percentage
+    Method get_error_percentage():
+        If self.total_entries equals 0:
+            Return 0
+        Else:
+            Return (self.errors_count divided by self.total_entries) multiplied by 100
+
+    // Calculate warning percentage
+    Method get_warning_percentage():
+        If self.total_entries equals 0:
+            Return 0
+        Else:
+            Return (self.warnings_count divided by self.total_entries) multiplied by 100
+
+    // Add multiple log entries at once
+    Method add_log_entries(error=0, warning=0, total=1):
+        Increase self.errors_count by error
+        Increase self.warnings_count by warning
+        Increase self.total_entries by total
+
+    // String representation of the object
+    Method to_string():
+        Return formatted string with total_entries, errors_count, warnings_count
+
+    // Validate that counts are non-negative
+    Method validate_counts():
+        If any of self.total_entries, self.errors_count, or self.warnings_count are less than 0:
+            Raise error "Counts cannot be negative."
+
+
+************PatternDetector class********************
+
+
+"Pseudocode"
+
+Class PatternDetector:
+    Initialize:
+        patterns = empty list
+        flagged_entries = empty list
+
+    Method add_pattern(regex):
+        Compile regex and add to patterns list
+
+    Method remove_pattern(regex):
+        Compile regex
+        Remove compiled regex from patterns list if it exists
+
+    Method clear_patterns():
+        Clear all patterns from patterns list
+
+    Method get_patterns():
+        Return list of pattern strings
+
+    Method get_flagged_entries():
+        Return list of flagged entries
+
+    Method clear_flagged_entries():
+        Clear all flagged entries
+
+    Method detect_patterns(log_entries):
+        For each entry in log_entries:
+            For each pattern in patterns:
+                If pattern matches entry:
+                    Add entry to flagged_entries
+                    Break inner loop (move to next entry)
+
+    Method detect_patterns_with_context(log_entries):
+        flagged_with_patterns = empty list
+        For each entry in log_entries:
+            For each pattern in patterns:
+                If pattern matches entry:
+                    Add (entry, pattern string) to flagged_with_patterns
+                    Break inner loop
+        Return flagged_with_patterns
+
+    Method set_patterns(regex_list):
+        Compile each regex in regex_list and store in patterns list
+
+    Method save_flagged_to_file(filename):
+        Open file for writing
+        For each entry in flagged_entries:
+            Write entry to file with newline
+
+    Method load_patterns_from_file(filename):
+        Open file for reading
+        For each line in file:
+            Strip whitespace
+            If line is not empty:
+                Add pattern to patterns list
+
+
+***********ReportExporter class************************
+
+
+
+"Pseudocode"
+
+Class ReportExporter:
+
+
+    Method export_log(report_data, file_path):
+        Try:
+            Open file at file_path in write mode
+            Write report_data (assumed Log formatted) to the file
+            Return True
+        Catch exceptions:
+            Print exception
+            Return False
+
+    Method export_txt(report_data, file_path):
+        Try:
+            Open file at file_path in write mode
+            Write report_data (plain text) to the file
+            Return True
+        Catch exceptions:
+            Print exception
+            Return False
+
+********************UserInterface class**************************
+
+
+"Pseudocode"
+
+
+Class UserInterface:
+
+    Method __init__():
+       
+
+    Method display_log(log_data):
+        Print "Log Information:"
+        Print log_data
+
+    Method show_statistics(statistics):
+        Print "Statistics Report:"
+        Print statistics
+
+    Method get_user_input(prompt_message):
+        Display prompt_message to the user
+        Wait for user input
+        Return the input
+
+    Method close():
+      
+
+    Method display_message(message):
+        Print message
+
+    Method display_error(error_message):
+        Print "Error: " + error_message
+
+    Method display_warning(warning_message):
+        Print "Warning: " + warning_message
+
+    Method display_menu(options):
+        Print "Please choose an option:"
+        For each option with index in options:
+            Print index + 1 and the option text
+        Loop until valid choice:
+            Prompt user to enter a number
+            If input is a digit:
+                Convert input to number
+                If number is within range of options:
+                    Return number - 1 (zero-based index)
+            Else:
+                Print "Invalid selection. Please try again."
+
+    Method clear_screen():
+        Import os module
+        If operating system is Windows:
+            Execute 'cls' command
+        Else:
+            Execute 'clear' command
+
+
+****************SearchFilter class*********************
+
+
+"Pseudocode"
+
+Class SearchFilter:
+    // Constructor to initialize search criteria
+    Method __init__(search_criteria=None):
+        Set self.search_criteria to search_criteria
+
+    // Get current search criteria
+    Method get_search_criteria():
+        Return self.search_criteria
+
+    // Set new search criteria
+    Method set_search_criteria(search_criteria):
+        Set self.search_criteria to search_criteria
+
+    // Reset search criteria to None
+    Method reset_criteria():
+        Set self.search_criteria to None
+
+    // Filter log entries based on current search criteria
+    Method filter(log_entries):
+        If self.search_criteria is None:
+            Return log_entries (no filtering)
+        Initialize filtered_entries as empty list
+        For each entry in log_entries:
+            If matches(entry, self.search_criteria) is True:
+                Add entry to filtered_entries
+        Return filtered_entries
+
+    // Search for entries containing a keyword
+    Method search(log_entries, keyword):
+        Initialize search_results as empty list
+        For each entry in log_entries:
+            If contains(entry, keyword) is True:
+                Add entry to search_results
+        Return search_results
+
+    // Check if an entry matches the criteria
+    Method matches(entry, criteria):
+        Return True if entry is not None AND criteria is in entry
+
+    // Check if an entry contains a keyword
+    Method contains(entry, keyword):
+        Return True if entry is not None AND keyword is in entry
+
+    // Check if an entry contains a keyword (case-insensitive)
+    Method contains_case_insensitive(entry, keyword):
+        Return True if entry is not None AND lowercase(keyword) is in lowercase(entry)
+
+    // Check if an entry matches a regex pattern
+    Method matches_pattern(entry, pattern):
+        Return True if entry is not None AND pattern matches entry using regex
+
+    // Count how many entries match the current search criteria
+    Method count_matches(log_entries):
+        Initialize count to 0
+        For each entry in log_entries:
+            If matches(entry, self.search_criteria) is True:
+                Increment count by 1
+        Return count
+
+    // Get unique entries from a list
+    Method get_unique_entries(log_entries):
+        Return list of unique elements from log_entries
+
+    // Sort log entries
+    Method sort_entries(log_entries, reverse=False):
+        Return log_entries sorted in ascending or descending order based on reverse
+
+
+*********************Ingest_log_files Fuction********************
+
+"pseudocode"
+
+Define function ingest_log_files:
+    Create an empty list called log_files_data
+
+    Initialize the GUI application (hide main window)
+
+    Prompt user to select one or more log files:
+        - Title: "Select Log Files"
+        - Filter by file types: log, txt, or all files
+
+    For each selected file path:
+        Try:
+            Open the file in read mode with utf-8 encoding
+            Read the entire content of the file
+            Extract the filename from the file path
+            Add a tuple of (filename, content) to log_files_data
+        Catch any errors:
+            Print error message with filename and error details
+
+    Return the list log_files_data
+
+   ********************LogFile class*******************
+
+"pseudocode"
+
+
+Class LogFile:
+    Constructor(file_path):
+        Set self.file_path to file_path
+        Initialize self.entries as an empty list
+
+    Method load():
+        Try:
+            Call parse()
+        Catch exception e:
+            Print error message
+
+    Method parse():
+        Clear self.entries
+        Try:
+            Open the file at self.file_path in read mode as reader
+            For each line in reader:
+                entry = parse_log_entry(line)
+                If entry is not None:
+                    Append entry to self.entries
+        Catch exception e:
+            Print error message
+
+    Method get_entries():
+        Return self.entries
+
+    Method parse_log_entry(line):
+        If line is None or empty:
+            Return None
+        Try:
+            Find position of '[' in line as timestamp_start
+            Find position of ']' in line as timestamp_end
+            If either is -1:
+                Return None
+            Extract timestamp between timestamp_start+1 and timestamp_end
+            Extract rest of line after timestamp_end, trim spaces
+            Split rest into parts using ':' as delimiter, max 1 split
+            First part is level, trim spaces
+            Second part (if exists) is message, trim spaces
+            Create and return a LogEntry object with timestamp, level, message
+        Catch exception:
+            Print error message
+            Return None
+
+
+******************sort_log_entries function***************
+
+"pseudocode"
+
+FUNCTION parse_timestamp(timestamp_string, list_of_formats):
+    IF timestamp_string is empty:
+        LOG warning "Timestamp string is empty"
+        RETURN None
+
+    FOR each format in list_of_formats:
+        TRY:
+            CONVERT timestamp_string to datetime using current format
+            IF successful:
+                RETURN the datetime object
+        CATCH parsing error:
+            LOG debug message "Failed to parse timestamp with format {format}"
+            CONTINUE to next format
+
+    LOG warning "Failed to parse timestamp with any format"
+    RETURN None
+
+
+FUNCTION sort_log_entries(log_entries, sort_key, reverse=False):
+    DEFINE timestamp_formats as list of date formats:
+        - '%Y-%m-%d %H:%M:%S'
+        - '%Y-%m-%dT%H:%M:%SZ'
+        - '%d/%m/%Y %H:%M:%S'
+    SET min_datetime to the earliest possible datetime value
+
+    DEFINE safe_sort_key(entry):
+        GET value from entry using sort_key
+        IF sort_key is 'timestamp':
+            PARSE value into datetime using parse_timestamp with timestamp_formats
+            IF parsing is successful:
+                RETURN parsed datetime
+            ELSE:
+                RETURN min_datetime
+        ELSE:
+            IF value exists:
+                RETURN value
+            ELSE:
+                RETURN empty string
+
+    TRY:
+        SORT log_entries using safe_sort_key as key, with optional reverse order
+        RETURN sorted list
+    CATCH any exception during sorting:
+        PRINT error message
+        RETURN original log_entries
+
+************search_logs function***************
+
+"pseudocode"
+
+FUNCTION search_logs(log_entries, keyword=None, start_date=None, end_date=None, log_level=None):
+
+    CREATE empty list filtered_logs
+
+    IF start_date is provided:
+        CONVERT start_date string to datetime object start_dt
+    ELSE:
+        start_dt = None
+
+    IF end_date is provided:
+        CONVERT end_date string to datetime object end_dt
+    ELSE:
+        end_dt = None
+
+    FOR each entry in log_entries:
+        GET timestamp string from entry
+        SET entry_time to None
+
+        IF timestamp string exists:
+            TRY to convert timestamp string to datetime object entry_time
+            IF conversion fails:
+                entry_time = None
+
+        IF entry_time exists:
+            IF start_dt exists AND entry_time is before start_dt:
+                SKIP to next entry
+            IF end_dt exists AND entry_time is after end_dt:
+                SKIP to next entry
+        ELSE:
+            IF start_dt or end_dt exists:
+                SKIP to next entry
+
+        IF log_level is specified AND entry's level does not match (case-insensitive):
+            SKIP to next entry
+
+        IF keyword is specified AND keyword not found in entry's message (case-insensitive):
+            SKIP to next entry
+
+        ADD entry to filtered_logs
+
+    RETURN filtered_logs
+
+**************parser function*******************
+
+
+"pseudocode"
+
+
+Function parse_template_line(line):
+    Define regex pattern for timestamp, level, message
+    Match line against pattern
+    If match is successful:
+        Return dictionary of matched groups (timestamp, level, message)
+    Else:
+        Raise error "Line does not match template"
+
+Function parse_generic_line(line):
+    Return dictionary with:
+        timestamp = None
+        level = None
+        message = line (stripped of whitespace)
+
+Function parse_log_or_txt(file_path):
+    Initialize empty list data
+    Open file at file_path for reading:
+        For each line in file:
+            Remove whitespace from line
+            If line is empty:
+                Continue to next line
+            Try:
+                parsed = parse_template_line(line)
+            Catch error:
+                parsed = parse_generic_line(line)
+            Append parsed to data
+    Return data
+
+Function process_files(file_paths, filter_keyword=None, filter_pattern=None):
+    Initialize empty list all_data
+    For each path in file_paths:
+        Get file extension
+        If extension not in supported types (.log, .txt):
+            Print message skipping file
+            Continue to next file
+        Try:
+            data = parse_log_or_txt(path)
+            filtered = filter_data(data, keyword=filter_keyword, pattern=filter_pattern)
+            Add filtered data to all_data
+        Catch error:
+            Print error message
+    summary = summarize_data(all_data)
+    Print "Processing complete" with summary
+    Return all_data and summary
+
+Function filter_data(data, keyword=None, pattern=None):
+    Initialize empty list filtered
+    For each entry in data:
+        message = entry's message field
+        If keyword is provided and present in message:
+            Add entry to filtered
+        Else if pattern is provided and matches message:
+            Add entry to filtered
+        Else if neither keyword nor pattern provided:
+            Add entry to filtered
+    Return filtered
+
+Function summarize_data(data):
+    total_entries = length of data
+    sample_entries = first 5 entries of data
+    Return dictionary with total_entries and sample_entries
+
+
+**************settings class******************
+
+"pseudocode"
+
+
+Class Settings
+
+    // Constant for preferences filename
+    PREFERENCES_FILE = "preferences.pkl"
+
+    // Constructor
+    Function __init__()
+        Initialize preferences as empty dictionary
+        Call reset_preferences()
+
+    // Set a preference key-value pair
+    Function set_preference(key, value)
+        preferences[key] = value
+
+    // Get the value of a preference by key
+    Function get_preference(key)
+        Return preferences[key] if key exists, else None
+
+    // Reset preferences to default values
+    Function reset_preferences()
+        Clear preferences
+        Set preferences["theme"] = "light"
+        Set preferences["notifications"] = True
+        Set preferences["language"] = "English"
+
+    // Save preferences to file
+    Function save_preferences()
+        Try
+            Open PREFERENCES_FILE in write-binary mode
+            Dump preferences into file using pickle
+            Print success message
+        Catch exceptions
+            Print error message
+
+    // Load preferences from file
+    Function load_preferences()
+        If PREFERENCES_FILE does not exist
+            Print message about missing file
+            Call reset_preferences()
+            Return
+        Try
+            Open PREFERENCES_FILE in read-binary mode
+            Load preferences from file using pickle
+            Print success message
+        Catch exceptions
+            Print error message
+            Call reset_preferences()
+
+    // Delete a preference by key
+    Function delete_preference(key)
+        If key exists in preferences
+            Remove key from preferences
+            Print deletion message
+        Else
+            Print not found message
+
+    // Check if a preference exists
+    Function has_preference(key)
+        Return True if key in preferences, else False
+
+    // Save preferences to a log file
+    Function save_to_log(filename = "preferences.log")
+        Try
+            Open filename in append mode
+            For each key, value in preferences
+                Write "key:value" to file
+            Print success message
+        Catch exceptions
+            Print error message
+
+    // Load preferences from a log file
+    Function load_from_log(filename = "preferences.log")
+        If filename does not exist
+            Print message about missing file
+            Return
+        Try
+            Open filename in read mode
+            For each line in file
+                If line contains ":"
+                    Split line into key and value
+                    Convert value to boolean or int if applicable
+                    Store key-value in preferences
+            Print success message
+        Catch exceptions
+            Print error message
+
+    // Save preferences to a text file
+    Function save_to_txt(filename = "preferences.txt")
+        Try
+            Open filename in write mode
+            For each key, value in preferences
+                Write "key: value" to file
+            Print success message
+        Catch exceptions
+            Print error message
+
+    // Load preferences from a text file
+    Function load_from_txt(filename = "preferences.txt")
+        If filename does not exist
+            Print message about missing file
+            Return
+        Try
+            Open filename in read mode
+            For each line in file
+                If line contains ":"
+                    Split into key and value
+                    Convert value to boolean or int if applicable
+                    Store in preferences
+            Print success message
+        Catch exceptions
+            Print error message
+
+    // Update preferences with a dictionary
+    Function update_preferences(prefs)
+        If prefs is not a dictionary
+            Print invalid input message
+            Return
+        Update preferences with prefs
+        Print update message
+
+    // String representation of the object
+    Function __str__()
+        Return string showing current preferences
+
+    // Import preferences from a dictionary
+    Function import_preferences(prefs)
+        If prefs is not a dictionary
+            Print invalid input message
+            Return
+        Update preferences with prefs
+        Print success message
+
+    // Export preferences as a copy
+    Function export_preferences()
+        Return a copy of preferences
+
+End Class
+
+
+
+
+

@@ -1,0 +1,24 @@
+Sequence Diagram for Log Analyzer & Report Generator (LARG)
+
+
+
+User        UserInterface     LogManager      LogFile      SearchFilter     ReportExporter
+ |                |              |               |              |                |
+ |--Select file-->|              |               |              |                |
+ |                |--loadLog()-->|               |              |                |
+ |                |              |--open()------>|              |                |
+ |                |              |               |--parse()---->|                |
+ |                |              |<-----parsed----|              |                |
+ |                |<---entries---|               |              |                |
+ |                |---display--->|               |              |                |
+ |--Enter search-->|             |               |              |                |
+ |                |--search()--->|               |              |                |
+ |                |              |--getEntries-->|              |                |
+ |                |              |<--entries-----|              |                |
+ |                |              |--filter()------------------->|                |
+ |                |              |<--filteredEntries------------|                |
+ |                |<---show results-----------------------------|                |
+ |--Export report->|             |               |              |                |
+ |                |--export()----------------------------------------------->|    |
+ |                |<----confirmation----------------------------------------|    |
+ |<---Show export result----------------------------------------------------|    |

@@ -1,0 +1,69 @@
+Data Flow Diagram for Log Analyzer & Report Generator (LARG) 1.1   
+
+
++----------------------+
+|           User       |
++----------------------+
+           |
+           | 1. Selects log files / provides input
+           v
++----------------------+
+|   User Interface     |
++----------------------+
+|                      |
++-----------+----------+
+            |
+            | 2. Sends log files for ingestion
+            | 3. Sends Parsing Mode (Generic / Template / Regex)
+            v
++----------------------+
+|    Log Manager       |
++----------------------+
+|                      |
++-----------+----------+
+            |
+            | 4. Parses log files based on mode
+            v
++----------------------+
+|   Log Entry Store    |  <--- Log entries stored here
+| (in-memory list /    |
+|  local cache)        |
++----------------------+
+            |
+            | 5. Log entries available for processing
+            |
++----------+   +------------------------+   +------------------------+   +-------------------------+
+| Search   |   | Summary/Statistics     |   | Pattern Detector       |   |  Report Exporter        |
+| Filter   |   +------------------------+   +------------------------+   +-------------------------+
++----------+           |                        |                         |
+     |                 |                        |                         |
+     |        6. Filter/search         7. Detect patterns        8. Export report
+     |                 |                        |                         |
+     +-----------------+------------------------+-------------------------+
+                         |                                              |
+                         |                                              |
+                         |                                              v
+                         |                               +---------------------------+
+                         |                               |  Log Report File          |
+                         |                               +---------------------------+
+                         |
+                         |                                              v
+                         |                               +---------------------------+
+                         |                               | Txt Export File           |
+                         |                               +---------------------------+
+                         |
+                         | 9. Results / summaries / reports
+                         v
+	+----------------------+
+	|   User Interface     |
+	+----------------------+
+        	   |
+            10. Displays to user
+           	   v
+	+----------------------+
+	|      User            |
+	+----------------------+
+
+
+
+
